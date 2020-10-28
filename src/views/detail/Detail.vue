@@ -10,11 +10,12 @@
         <detail-comment-info :comment-info="commentInfo" ref="comment"></detail-comment-info>
         <goods-list :goods="recommendeds" ref="recommend"></goods-list>
       </scroll>
-      <detail-bottom-bar class="detail-bottom"></detail-bottom-bar>
+      <detail-bottom-bar class="detail-bottom" @addCart="addToCart"></detail-bottom-bar>
       <back-top @click.native="backClick" v-show="isShowBackTop"
                 @addCart="addToCart"
                 class="back-top">
       </back-top>
+      <!--<toast :message="message" :show="show"></toast>-->
 
     </div>
 </template>
@@ -34,9 +35,11 @@
   import Scroll from 'components/common/scroll/Scroll'
   import GoodsList from 'components/content/goods/GoodsList'
   import BackTop from 'components/content/backTop/BackTop'
+  //import Toast from 'components/common/toast/Toast'
 
   import {getDetail,Goods,Shop,GoodsParam,getRecommend} from "../../network/detail";
   import {debounce} from "../../common/utils";
+
 
   export default {
         name: "Detail",
@@ -56,6 +59,7 @@
         Shop,
         Scroll,
         BackTop,
+        //Toast
       },
       data(){
           return{
@@ -73,6 +77,8 @@
             getThemTopY:null,
             currentIndex:0,
             isShowBackTop:false,
+            // message:'',
+            // show:false
           }
       },
       created(){
@@ -122,6 +128,7 @@
           this.themeTopYs.push(this.$refs.params.$el.offsetTop );
           this.themeTopYs.push(this.$refs.comment.$el.offsetTop );
           this.themeTopYs.push(this.$refs.recommend.$el.offsetTop );
+          this.themeTopYs.push(Number.MAX_VALUE)
 
           //console.log(this.themeTopYs);
         },300)
@@ -162,7 +169,7 @@
         this.$refs.scroll.scrollTo(0,0)
       },
       addToCart() {
-        window.alert("成功加入购物车");
+        //window.alert("成功加入购物车");
         //获取购物车需要展示的信息
         const product = {};
         product.image = this.topImages[0];
@@ -172,7 +179,17 @@
         product.iid = this.iid;
         //将商品添加到购物车
         //this.$store.commit('addCart', product)
-        this.$store.dispatch("addCart", product);
+        this.$store.dispatch("addCart", product).then(res =>{
+          // console.log(res)
+          // this.show = true
+          // this.message = res;
+          // setTimeout(() =>{
+          //   this.show = false;
+          //   this.message = ''
+          // },1500)
+
+          this.$toast.show(res,2000)
+        });
 
       },
     },
@@ -182,6 +199,9 @@
     },
     deactivated(){
 
+    },
+    activated(){
+      this.$refs.scroll.refresh()
     },
     }
 </script>

@@ -19,6 +19,8 @@ Vue.use(VueLazyLoad,{
   loading:require('./assets/images/common/placeholder.png')
 })
 
+Vue.prototype.$bus=new Vue()
+
 //安装toast插件
 Vue.use(toast)
 

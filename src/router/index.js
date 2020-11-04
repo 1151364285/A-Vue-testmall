@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 const home = () => import('../views/home/home.vue')
-const category = () =>import('../views/category/Progress-Bar')
+const category = () =>import('../views/category/Category')
 const cart = () =>import('../views/cart/cart')
 const profile = () =>import('../views/profile/profile')
 const Detail =  () =>import('../views/detail/Detail')
